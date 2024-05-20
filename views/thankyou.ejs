@@ -1,0 +1,21 @@
+<% layout('/layouts/boilerplate.ejs') %>
+<section class="container">
+    <audio src="/audio/thankyou.mp3" id="thankyou-audio" class="t-none"></audio>
+  <h1>Thank You!</h1>
+  <p>Your feedback has been submitted successfully.</p>
+</section>
+
+<script>
+  window.addEventListener('load', function() {
+    // Stop the sample audio if it's still playing
+    const sampleAudio = document.getElementById('sample-audio');
+    if (sampleAudio) {
+      sampleAudio.pause();
+      sampleAudio.currentTime = 0;
+    }
+
+    // Play the "Thankyou.mp3" audio
+    const thankyouAudio = document.getElementById('thankyou-audio');
+    thankyouAudio.play();
+  });
+</script>

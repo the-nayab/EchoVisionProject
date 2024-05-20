@@ -1,0 +1,62 @@
+<% layout('/layouts/boilerplate.ejs') %>
+<section class="container contact-us">
+  <h1>You are on feedback page.</h1>
+  <form action="/feedback" method="POST" id="contactForm" class="mt-5">
+    <div class="mb-3">
+      <label for="name" class="form-label">Name:</label>
+      <p class="form-control-static" id="name">Echo Vision</p> <!-- Static Name Field -->
+    </div>
+    <div class="mb-3">
+      <label for="feedback" class="form-label">To record your feedback, click anywhere on the screen. Your feedback will be autosubmitted</label>
+      <textarea class="form-control" id="feedback" name="feedback" rows="3" required><%= formData.feedback || '' %></textarea>
+    </div>
+    <!-- Hidden submit button -->
+    <button type="submit" id="submitButton" style="display: none;"></button>
+  </form>
+</section>
+
+<!-- Scripts -->
+<script src="/js/speechToText.js"></script>
+<script src="/js/typed.js"></script>
+
+<script>
+  // Primary loader Function to Start the Process
+  window.addEventListener("load", () => {
+    readHeadingAndParagraphContent();
+  });
+
+  const readHeadingAndParagraphContent = () => {
+    const headingContent = document.querySelector("h1").textContent;
+    const paragraphContent = document.querySelector("#name").textContent;
+    startRecognition(headingContent + " " + paragraphContent);
+  };
+
+  document.addEventListener('click', () => {
+    startRecognition('feedback');
+  });
+
+  function startRecognition(field) {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'en-US';
+    recognition.start();
+
+    recognition.onresult = function(event) {
+      const transcript = event.results[0][0].transcript;
+      document.getElementById(field).value = transcript;
+      stopDefaultAudio();
+      document.getElementById('submitButton').click();
+    };
+
+    recognition.onerror = function(event) {
+      console.error('Speech recognition error', event.error);
+    };
+  }
+
+  function stopDefaultAudio() {
+    const sampleAudio = document.getElementById('sample-audio');
+    if (sampleAudio) {
+      sampleAudio.pause();
+      sampleAudio.currentTime = 0;
+    }
+  }
+</script>

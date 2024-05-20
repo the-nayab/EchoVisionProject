@@ -1,0 +1,6 @@
+﻿beautifulsoup4==4.9.3
+bs4==0.0.1
+ffmpeg==1.4
+gTTS==2.2.3
+pydub==0.25.1
+requests==2.26.0
